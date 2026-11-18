@@ -1,7 +1,7 @@
 {
   "team": "K5_L3A_Day10_AloAlo_PoCtoPilotGate1",
   "version": "1.0 (nối PRD v1.1 và eval card của Lab 9)",
-  "signed_by": "Nguyễn Thế Văn (Trưởng nhóm), thay mặt bàn AloAlo",
+  "signed_by": "NguyenTheVan",
   "gate": "Bước đánh giá 1 (kết thúc PoC)",
   "required": {
     "pass_rate_min": 0.94,
