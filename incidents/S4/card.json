@@ -1,0 +1,6 @@
+{
+ "incident": "S4",
+ "title": "Đêm 11.11: ticket gấp ba, hàng chờ duyệt ngập",
+ "run": "python3 -m lab10.eval --suite S4 --stage before",
+ "grade": "python3 -m lab10.grade --incident S4"
+}

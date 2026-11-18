@@ -1,0 +1,6 @@
+{
+ "incident": "S8",
+ "title": "Trưởng ca CSKH: chúng tôi không tin trợ lý, đang kiểm tay hết",
+ "run": "python3 -m lab10.eval --suite S8 --stage before",
+ "grade": "python3 -m lab10.grade --incident S8"
+}

@@ -1,0 +1,6 @@
+{
+ "incident": "S5",
+ "title": "CFO: mỗi ticket qua trợ lý đang đắt hơn làm tay",
+ "run": "python3 -m lab10.eval --suite S5 --stage before",
+ "grade": "python3 -m lab10.grade --incident S5"
+}

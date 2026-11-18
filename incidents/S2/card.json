@@ -1,0 +1,6 @@
+{
+ "incident": "S2",
+ "title": "Đối soát: shop bị trừ tiền lạ",
+ "run": "python3 -m lab10.eval --suite S2 --stage before",
+ "grade": "python3 -m lab10.grade --incident S2"
+}

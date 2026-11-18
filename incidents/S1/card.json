@@ -1,0 +1,6 @@
+{
+ "incident": "S1",
+ "title": "Hãng Sông Hồng khiếu nại bị ghi lỗi oan",
+ "run": "python3 -m lab10.eval --suite S1 --stage before",
+ "grade": "python3 -m lab10.grade --incident S1"
+}

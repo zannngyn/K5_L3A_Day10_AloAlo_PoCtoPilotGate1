@@ -1,0 +1,6 @@
+{
+ "incident": "S6",
+ "title": "Tài xế bị trừ thưởng vì kiện của hãng khác",
+ "run": "python3 -m lab10.eval --suite S6 --stage before",
+ "grade": "python3 -m lab10.grade --incident S6"
+}

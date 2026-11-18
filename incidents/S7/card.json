@@ -1,0 +1,6 @@
+{
+ "incident": "S7",
+ "title": "Email pháp chế: lộ số điện thoại người nhận quà",
+ "run": "python3 -m lab10.eval --suite S7 --stage before",
+ "grade": "python3 -m lab10.grade --incident S7"
+}

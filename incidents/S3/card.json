@@ -1,0 +1,6 @@
+{
+ "incident": "S3",
+ "title": "Hãng miền Tây bị phạt vì bão",
+ "run": "python3 -m lab10.eval --suite S3 --stage before",
+ "grade": "python3 -m lab10.grade --incident S3"
+}

@@ -1,0 +1,228 @@
+{
+ "orders": [
+  {
+   "order_id": "O-2701",
+   "customer_id": "C-01",
+   "merchant_id": "M-01",
+   "warehouse_id": "HN",
+   "goods_value_vnd": 480000,
+   "shipping_fee_vnd": 25000,
+   "placed_at": "2026-11-04",
+   "is_gift": false,
+   "recipient": {
+    "name": "Nguyễn Thị Tâm",
+    "phone": "0912345678",
+    "street": "14 ngõ 82 Chùa Láng",
+    "district": "Đống Đa"
+   },
+   "parcels": [
+    {
+     "parcel_id": "O-2701-P1",
+     "carrier_id": "GHSH",
+     "driver_id": "TX-GHSH-01",
+     "promised_date": "2026-11-10",
+     "delivered_date": "2026-11-14",
+     "status": "DELIVERED",
+     "delay_cause": "CARRIER"
+    }
+   ],
+   "refund_status": "NONE"
+  },
+  {
+   "order_id": "O-2702",
+   "customer_id": "C-02",
+   "merchant_id": "M-05",
+   "warehouse_id": "HCM",
+   "goods_value_vnd": 350000,
+   "shipping_fee_vnd": 24000,
+   "placed_at": "2026-11-04",
+   "is_gift": false,
+   "recipient": {
+    "name": "Trần Văn Lộc",
+    "phone": "0987654321",
+    "street": "210 Nguyễn Thị Minh Khai",
+    "district": "Quận 3"
+   },
+   "parcels": [
+    {
+     "parcel_id": "O-2702-P1",
+     "carrier_id": "VNX",
+     "driver_id": "TX-VNX-02",
+     "promised_date": "2026-11-11",
+     "delivered_date": "2026-11-14",
+     "status": "DELIVERED",
+     "delay_cause": "CARRIER"
+    }
+   ],
+   "refund_status": "NONE"
+  },
+  {
+   "order_id": "O-2703",
+   "customer_id": "C-09",
+   "merchant_id": "M-05",
+   "warehouse_id": "DN",
+   "goods_value_vnd": 520000,
+   "shipping_fee_vnd": 26000,
+   "placed_at": "2026-11-04",
+   "is_gift": false,
+   "recipient": {
+    "name": "Lê Thị Hòa",
+    "phone": "0905112233",
+    "street": "31 Ông Ích Khiêm",
+    "district": "Hải Châu"
+   },
+   "parcels": [
+    {
+     "parcel_id": "O-2703-P1",
+     "carrier_id": "DNB",
+     "driver_id": "TX-DNB-03",
+     "promised_date": "2026-11-09",
+     "delivered_date": "2026-11-14",
+     "status": "DELIVERED",
+     "delay_cause": "CARRIER"
+    }
+   ],
+   "refund_status": "NONE"
+  },
+  {
+   "order_id": "O-2704",
+   "customer_id": "C-05",
+   "merchant_id": "M-04",
+   "warehouse_id": "HCM",
+   "goods_value_vnd": 260000,
+   "shipping_fee_vnd": 20000,
+   "placed_at": "2026-11-04",
+   "is_gift": false,
+   "recipient": {
+    "name": "Phạm Thị Nga",
+    "phone": "0933445566",
+    "street": "7 hẻm 51 Cao Thắng",
+    "district": "Quận 3"
+   },
+   "parcels": [
+    {
+     "parcel_id": "O-2704-P1",
+     "carrier_id": "VNX",
+     "driver_id": "TX-VNX-04",
+     "promised_date": "2026-11-10",
+     "delivered_date": "2026-11-14",
+     "status": "DELIVERED",
+     "delay_cause": "CARRIER"
+    }
+   ],
+   "refund_status": "NONE"
+  },
+  {
+   "order_id": "O-2705",
+   "customer_id": "C-13",
+   "merchant_id": "M-02",
+   "warehouse_id": "HN",
+   "goods_value_vnd": 170000,
+   "shipping_fee_vnd": 18000,
+   "placed_at": "2026-11-04",
+   "is_gift": false,
+   "recipient": {
+    "name": "Trịnh Gia Tuấn",
+    "phone": "0365431413",
+    "street": "27 Kim Mã",
+    "district": "Ba Đình"
+   },
+   "parcels": [
+    {
+     "parcel_id": "O-2705-P1",
+     "carrier_id": "GHSH",
+     "driver_id": "TX-GHSH-05",
+     "promised_date": "2026-11-11",
+     "delivered_date": "2026-11-14",
+     "status": "DELIVERED",
+     "delay_cause": "CARRIER"
+    }
+   ],
+   "refund_status": "NONE"
+  },
+  {
+   "order_id": "O-2706",
+   "customer_id": "C-06",
+   "merchant_id": "M-03",
+   "warehouse_id": "CT",
+   "goods_value_vnd": 300000,
+   "shipping_fee_vnd": 22000,
+   "placed_at": "2026-11-04",
+   "is_gift": false,
+   "recipient": {
+    "name": "Hồ Thị Kim",
+    "phone": "0966123789",
+    "street": "18 Trần Hưng Đạo",
+    "district": "Ninh Kiều"
+   },
+   "parcels": [
+    {
+     "parcel_id": "O-2706-P1",
+     "carrier_id": "MKD",
+     "driver_id": "TX-MKD-06",
+     "promised_date": "2026-11-13",
+     "delivered_date": "2026-11-14",
+     "status": "DELIVERED",
+     "delay_cause": "CARRIER"
+    }
+   ],
+   "refund_status": "NONE"
+  },
+  {
+   "order_id": "O-2720",
+   "customer_id": "C-10",
+   "merchant_id": "M-01",
+   "warehouse_id": "HN",
+   "goods_value_vnd": 420000,
+   "shipping_fee_vnd": 25000,
+   "placed_at": "2026-11-04",
+   "is_gift": true,
+   "recipient": {
+    "name": "Đoàn Văn Phúc",
+    "phone": "0977889900",
+    "street": "125 Đội Cấn",
+    "district": "Ba Đình"
+   },
+   "parcels": [
+    {
+     "parcel_id": "O-2720-P1",
+     "carrier_id": "GHSH",
+     "driver_id": "TX-GHSH-06",
+     "promised_date": "2026-11-10",
+     "delivered_date": "2026-11-14",
+     "status": "DELIVERED",
+     "delay_cause": "CARRIER"
+    }
+   ],
+   "refund_status": "NONE"
+  },
+  {
+   "order_id": "O-2721",
+   "customer_id": "C-14",
+   "merchant_id": "M-05",
+   "warehouse_id": "HCM",
+   "goods_value_vnd": 380000,
+   "shipping_fee_vnd": 24000,
+   "placed_at": "2026-11-04",
+   "is_gift": true,
+   "recipient": {
+    "name": "Trần Văn Lộc",
+    "phone": "0987654321",
+    "street": "210 Nguyễn Thị Minh Khai",
+    "district": "Quận 3"
+   },
+   "parcels": [
+    {
+     "parcel_id": "O-2721-P1",
+     "carrier_id": "VNX",
+     "driver_id": "TX-VNX-07",
+     "promised_date": "2026-11-09",
+     "delivered_date": "2026-11-14",
+     "status": "DELIVERED",
+     "delay_cause": "CARRIER"
+    }
+   ],
+   "refund_status": "NONE"
+  }
+ ]
+}
