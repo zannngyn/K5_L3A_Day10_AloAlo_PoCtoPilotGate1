@@ -1,17 +1,17 @@
 {
-  "team": "",
+  "team": "K5_L3A_Day10_AloAlo_PoCtoPilotGate1",
   "members": [
     "NguyenTheVan-2A202603474",
     "TranVanTai-2A202603506",
     "PhanNhatTruong-2A202603459",
     "NguyenTienDat-2A202603452"
   ],
-  "incident": "",
-  "decision_v1": "",
-  "decision_v2": "",
+  "incident": "S4",
+  "decision_v1": "Tiếp tục",
+  "decision_v2": "Thu hẹp",
   "three_lines": {
-    "environment_assumption": "",
-    "reduce_or_prevent": "",
-    "measure_in_pilot": ""
+    "environment_assumption": "Thiết kế đang giả định trạng thái và delay_cause trên tracking DB được kho/hãng cập nhật đúng và kịp thời tại thời điểm khách gửi ticket, đồng thời mỗi người duyệt luôn xử lý đều đặn 6 ca/giờ (10 phút/ca) và không có nhân viên CSKH nào hoàn tiền tay song song ngoài sổ cái của trợ lý; ngoài thực tế dịp sale, quét mã trễ ở kho hoặc một ca khiếu nại hàng vỡ kéo dài 25–30 phút sẽ làm lệch cả căn cứ cổng DB lẫn SLA 60 phút.",
+    "reduce_or_prevent": "Các cổng code trong write_gate NGĂN HẲN (trong phạm vi dữ liệu DB đúng) việc hoàn tiền sai chính sách, phạt hãng oan do 429 fail_open, ghi đúp khi retry và vượt trần hoàn tự động 300.000đ/ngày (wrongful_refund_vnd = 0đ, wrongful_carrier_faults = 0, auto_refund_day_max_vnd = 292.000đ), nhưng cổng vận hành reviewers_on_shift = 2 (12 ca/giờ) chỉ GIẢM KHẢ NĂNG ùn tắc hàng chờ (wait_max_min từ 82,0 xuống 15,0 phút, 0 ca ùn ở tải gấp 3) chứ không ngăn tuyệt đối nếu lưu lượng khiếu nại tăng vọt quá 24 ca/giờ hoặc nhân sự trực vắng đột xuất.",
+    "measure_in_pilot": "Trước Bước đánh giá 2 trên pilot thu hẹp (3 kho HCM, HN, CT cho đơn giao trễ ngày thường), đội phải đo lại trên lưu lượng thật: (1) phân vị P95 thời gian chờ duyệt thực tế và công suất ca/giờ thật của CSKH khi có decision_note, (2) chi phí API + tỷ lệ lỗi 429/timeout của LLM thật (llm_degraded_rate) để chốt cost_per_ticket_vnd và ROI thật so với ngưỡng 6.000đ / 0,5, và (3) tỷ lệ lệch sổ đối soát cuối tuần của chị Oanh giữa tracking DB với thực tế bàn giao kho/hãng."
   }
 }
