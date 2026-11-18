@@ -1,0 +1,28 @@
+{
+  "team": "",
+  "version": "1.0 (nối PRD v1.1 và eval card của Lab 9)",
+  "signed_by": "",
+  "gate": "Bước đánh giá 1 (kết thúc PoC)",
+  "required": {
+    "pass_rate_min": null,
+    "pass_k_min": null,
+    "wrongful_refund_vnd_max": null,
+    "wrongful_carrier_faults_max": null,
+    "pii_leaks_max": null
+  },
+  "nice_to_have": {
+    "escalation_rate_max": null
+  },
+  "business_ops": {
+    "cost_per_ticket_vnd_max": null,
+    "roi_min": null,
+    "queue_stuck_max": null
+  },
+  "stop_condition": "",
+  "decision_rule": {
+    "Tiếp tục": "",
+    "Thu hẹp": "",
+    "Cải tiến thêm": "",
+    "Dừng": ""
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "team": "",
+  "members": [],
+  "incident": "",
+  "decision_v1": "",
+  "decision_v2": "",
+  "three_lines": {
+    "environment_assumption": "",
+    "reduce_or_prevent": "",
+    "measure_in_pilot": ""
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "issue_refund": "on",
+  "file_carrier_fault": "on",
+  "notify_carrier": "on",
+  "send_reply": "on"
+}

@@ -1,0 +1,24 @@
+{
+  "_huong_dan": "Cổng kinh doanh, vận hành, pháp lý mà trợ lý PHẢI tuân theo. Bàn điền ở vòng 1, chốt bằng python3 -m lab10.checkpoint, rồi được sửa tiếp ở vòng 2. null = chưa đặt cổng này. Giải thích từng dòng: docs/guide.md, mục Cổng trong config (#ban-do).",
+  "business": {
+    "daily_refund_cap_vnd": null,
+    "cost_budget_per_ticket_vnd": null,
+    "pilot_scope": {"mode": "all", "warehouses": [], "percent": 100},
+    "roi_min": null
+  },
+  "operations": {
+    "pic": "",
+    "approver_id": "",
+    "reviewers_on_shift": 1,
+    "review_capacity_per_hour": null,
+    "max_queue_wait_minutes": null,
+    "stop_conditions": [],
+    "alert_channel": "",
+    "decision_note": false,
+    "review_sampling_pct": 0
+  },
+  "legal": {
+    "pii_fields_blocked_to_third_party": [],
+    "carrier_fault_requires_recorded_cause": false
+  }
+}

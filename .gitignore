@@ -1,0 +1,6 @@
+# Máy tự sinh, không cần lưu lên git
+__pycache__/
+*.pyc
+.DS_Store
+# Kết quả mỗi lần chạy. Lệnh 7 (check_submission --collect) chép những gì cần nộp vào submission/.
+/runs/
