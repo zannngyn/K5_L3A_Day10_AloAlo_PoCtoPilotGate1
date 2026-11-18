@@ -73,9 +73,9 @@ nhau chia cho số lần chạy có sự kiện `proposal`; lần chạy không 
 
 ### Câu 1.5 · Chọn MỘT kết luận và giải thích một câu
 
-Số minh hoạ trong đề (không phải số của bàn). Khoanh: **(a) · (b) · (c) · (d)**
+Số minh hoạ trong đề (không phải số của bàn). Khoanh: (a) · **(b)** · (c) · (d)
 
-Giải thích một câu: …
+Giải thích một câu: Khoảng tin cậy 95% của X là [0,9400; 1,0] (bootstrap 1.000 mẫu, đúng cách `lab10.eval` tính) đã bao trùm giá trị 1,0 của Y, nên chênh lệch 1/50 lần chạy chỉ là dao động lấy mẫu — chưa đủ căn cứ nói Y tốt hơn X, muốn kết luận phải chạy thêm seed để khoảng tin cậy hẹp lại.
 
 ---
 
