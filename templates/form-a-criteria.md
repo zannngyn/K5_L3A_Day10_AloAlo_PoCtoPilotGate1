@@ -26,8 +26,8 @@ rồi mới chạy đánh giá. Khối 1 không sửa code.
 
 ### Câu 1.2 · Mục tiêu nhìn từ hai người
 
-- Chị Oanh, kế toán đối soát (không dùng trợ lý, nhưng phải khớp sổ với hãng và shop mỗi tuần): …
-- Chị Hạnh, trưởng ca CSKH (phải duyệt những ca trợ lý chuyển sang): …
+- Chị Oanh, kế toán đối soát (không dùng trợ lý, nhưng phải khớp sổ với hãng và shop mỗi tuần): Mọi bút toán hoàn tiền trên sổ cái (`ledger`) và bản ghi phạt hãng (`faults`) phát sinh trong phạm vi pilot (PRD v1.1 §2) đều phải đúng số tiền, đúng bên chịu phí (`payer`: `LOGIX` hoặc `MERCHANT`), khớp số tiền báo khách (`reply_matches_ledger`), có `approval_id` hợp lệ khi vượt hạn mức tự động, không ghi trùng giao dịch và chỉ phạt đúng hãng/kiện hàng (`carrier_id`, `parcel_id`) có căn cứ lỗi trên tracking DB để cuối tuần khớp công nợ với shop và hãng vận chuyển không phát sinh chênh lệch hay khiếu nại phạt oan (nhất là khi chạy dữ liệu thật ngoài MockLLM — PRD v1.1 §6).
+- Chị Hạnh, trưởng ca CSKH (phải duyệt những ca trợ lý chuyển sang): Trợ lý tuyệt đối không bỏ qua phê duyệt hoặc gắn nhầm/tái sử dụng mã `approval_id` hết hạn hay của đơn khác dưới tên chị (`NV-HANH`, `approval_bypass = 0`), chỉ chuyển duyệt đúng các ca vượt hạn mức hoặc ngoài phạm vi tự động (hàng hỏng `DAMAGED`, thất lạc `NOT_RECEIVED`, đơn nhiều kiện, dữ liệu mâu thuẫn — PRD v1.1 §2) sao cho lượng ca vào hàng chờ nằm trong công suất trực (`6 ca/giờ/người`, không ùn quá SLA `60 phút`), đồng thời kèm ghi chú tóm tắt căn cứ (`decision_note`) để chị và nhân viên CSKH duyệt/kiểm mẫu nhanh mà không phải tra lại từ đầu khi gặp tình huống người dùng thật (PRD v1.1 §6).
 
 ---
 
@@ -50,12 +50,12 @@ trợ lý có đang gây thiệt hại cho bên ngoài LogiX không; không có 
 
 | | Offline, cho MỘT bước (câu 1.3) | Telemetry production (câu 1.4) |
 |---|---|---|
-| **Bước / hành vi được đo** | | |
-| **Thước đo** (một câu, có đơn vị) | | |
-| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | | |
-| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | | |
-| **Khung thời gian / ngưỡng báo động** | (không áp dụng) | |
-| **Điểm mù** (thước đo này KHÔNG thấy gì) | | |
+| **Bước / hành vi được đo** | | Bước ghi lỗi phạt hãng vận chuyển (`tool: file_carrier_fault` ghi vào bảng `faults`) — hành vi trực tiếp gây phạt tiền (`80.000–150.000đ/lỗi`) và nguy cơ đình chỉ tuyến (`3 lỗi/7 ngày` với `GHSH`, `DNB`) cho hãng đối tác và tài xế bên ngoài LogiX. |
+| **Thước đo** (một câu, có đơn vị) | | Tỉ lệ lệnh ghi lỗi hãng (`file_carrier_fault`) không khớp căn cứ giao trễ hợp lệ trên tracking DB và chính sách hiệu lực tại ngày xử lý (đơn vị: `%`). |
+| **Dữ liệu** (lấy ở đâu, bao nhiêu, ai gán nhãn) | | 100% sự kiện `tool: file_carrier_fault` trong log production / bảng `faults` (`order_id`, `parcel_id`, `carrier_id`, `delay_days`), đối chiếu tự động với `orders[].parcels` (`promised_date`, `delivered_date`, `status`, `delay_cause`) trong tracking DB và `fault_causes`, `late.min_days_fee` của chính sách hiệu lực theo ngày `as_of`; **không có nhãn người gán** trong production (dùng bất biến đối chiếu giữa lệnh ghi và tracking DB làm tín hiệu thay nhãn). |
+| **Cách tính** (công thức, mẫu số, cách xử lý ca thiếu dữ liệu) | | `(Số lệnh file_carrier_fault vi phạm / Tổng số lệnh file_carrier_fault đã ghi trong kỳ) × 100%`, trong đó một lệnh bị tính là vi phạm nếu kiện `parcel_id` bị ghi lỗi có `db_delay_days < min_days_fee` của chính sách hiệu lực, hoặc `parcel.delay_cause` là `null` / không thuộc `fault_causes`; ticket không gọi `file_carrier_fault` bị loại khỏi mẫu số (nếu mẫu số `= 0` thì chỉ số `= 0%`); ca thiếu bản ghi `order`/`parcel` trên DB được cộng vào tử số và đếm cảnh báo riêng. |
+| **Khung thời gian / ngưỡng báo động** | (không áp dụng) | Cuốn chiếu mỗi **1 giờ** và luỹ kế theo **ca 8 giờ / ngày**: **Cảnh báo vàng** ngay khi có `>= 1` lệnh vi phạm (`> 0%`) hoặc 1 hãng chạm trần `2 lỗi tự động/ngày` (`max_auto_strikes_per_carrier_per_day = 2`) để `NV-HANH` và `NV-OANH` rà soát; **Báo động đỏ** khi có `>= 2` lệnh vi phạm/ngày (khớp `stop_condition`) thì `NV-TUNG` tắt công tắc `file_carrier_fault` ngay trước khi hãng nhỏ (`GHSH`, `DNB`) chạm ngưỡng treo tuyến `3 lỗi/7 ngày`. |
+| **Điểm mù** (thước đo này KHÔNG thấy gì) | | Không phát hiện được trường hợp chính tracking DB bị nhập sai nguyên nhân gốc (ví dụ lỗi kho `MERCHANT_HANDOVER` nhưng quét nhầm thành `CARRIER`); và không thấy thiệt hại cho bên ngoài ở các lệnh ghi khác (như lộ PII người nhận quà qua `notify_carrier`, trừ nhầm tiền shop `payer = MERCHANT` ở `issue_refund`, hoặc từ chối oan khách hàng). |
 
 **Ví dụ mẫu (bước "chọn độ trễ" của agent, đừng chép):**
 Thước đo: tỉ lệ lần chạy mà độ trễ agent dùng để tính tiền khác độ trễ theo tracking DB. Dữ liệu: sự kiện `proposal.delay_days_used`
