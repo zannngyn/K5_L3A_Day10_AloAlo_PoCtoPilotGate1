@@ -420,7 +420,7 @@ bao nhiêu thời gian? (3) Có phần nào của dự án không nên làm ti�
 
 | | **v1** (phút 105–115, TRƯỚC khi nhận thẻ sự cố) |
 |---|---|
-| Commit ký tiêu chí (message `Sign acceptance criteria`; hash commit, tuỳ chọn) | `e343882`; hash file tiêu chí `6ec55a46`, verify còn nguyên. |
+| Commit ký tiêu chí (message `Sign acceptance criteria`; hash commit, tuỳ chọn) | `e343882` (hash tiêu chí `6ec55a46`, ký lúc `2026-11-18T16:37:21`); verify còn nguyên. |
 | Hash chốt cổng vòng 1 (8 ký tự lệnh `lab10.checkpoint` in ra, tuỳ chọn) | `61022954`; bản chụp đã verify còn nguyên. |
 | Mã lần chạy dùng làm bằng chứng | bộ nền, mốc base: `R-base-before-20261118-164248-bde05c` · bộ nền với cổng vòng 1 (prepared): `R-base-prepared-20261118-172112-8f5a8c` |
 | Còn dòng "vượt trần" nào trong report? (hàng chờ, chi phí, ROI, trần tiền, pháp lý) | |
@@ -433,9 +433,9 @@ bao nhiêu thời gian? (3) Có phần nào của dự án không nên làm ti�
 | Nếu Thu hẹp: cắt phần nào, vì sao | |
 | Nếu Cải tiến thêm: giả thuyết cụ thể + hạn | |
 | Nếu Dừng: bài học ghi lại | |
-| Một bằng chứng còn thiếu (thứ bộ nền chưa đo được) | |
-| Ngày quyết định lại (trừ khi Dừng) | |
-| PIC ký | |
+| Một bằng chứng còn thiếu (thứ bộ nền chưa đo được) | Bộ nền chỉ chạy với ngày xử lý `as_of = 2026-11-16` (chính sách REFUND-v3), nên **chưa đo được hành vi sau khi REFUND-v4 hiệu lực 01/12/2026** (hạn mức tự động 100.000đ, trễ do bão không còn ghi lỗi hãng — drift ở B3); cũng chưa có dữ liệu người dùng thật / LLM thật (PRD v1.1 §6), và hoàn **thiếu** (`under_refund_vnd`) không có ngưỡng ký. |
+| Ngày quyết định lại (trừ khi Dừng) | `2026-11-30` (trước khi REFUND-v4 hiệu lực) · dự: cả bàn, NV-TUNG, NV-HANH, NV-OANH |
+| PIC ký | `NV-TUNG` (Lê Thanh Tùng, `operations.pic`) · thay mặt bàn: NguyenTheVan |
 
 Xong v1 thì lưu và đẩy một bản (sau mốc này không sửa cột v1):
 
