@@ -324,10 +324,10 @@ Mỗi con số kèm một câu lý do, lấy từ `data/world.json` → `ops_lim
 
 | Khoá | Giá trị bàn đặt | Lý do (một câu, có số) |
 |---|---|---|
-| `business.daily_refund_cap_vnd` | | |
-| `business.cost_budget_per_ticket_vnd` | | |
-| `business.pilot_scope` (all / warehouse / percent) | | |
-| `business.roi_min` | | |
+| `business.daily_refund_cap_vnd` | `500000` | Ngân sách Finance cho hoàn tự động là 2.000.000đ/ngày (`ops_limits.daily_auto_refund_budget_vnd`), nhưng ngày hoàn tự động nhiều nhất ở baseline chỉ 155.000đ; trần 500.000đ (~3 lần mức cao nhất, đủ cho cao điểm bão / Tết) giới hạn thiệt hại tệ nhất của một ngày pilot ở mức ~4 ngày tiết kiệm ròng (~127.000đ/ngày = 22 ticket × (10.000 − 4.203)đ), thay vì ~16 ngày nếu để bằng trần Finance; khoản vượt trần không bị từ chối mà chuyển chị Hạnh duyệt. |
+| `business.cost_budget_per_ticket_vnd` | `1500` | Đúng trần tiền LLM 1.500đ/ticket đã thống nhất với Ops và Finance (`ops_limits.max_llm_cost_per_ticket_vnd`); ticket dài nhất bộ nền (86 ký tự) chỉ tốn ~770đ (200 nền + 150 đọc + 86/4 + 200 + 100 + 100 theo `ops_facts.llm_cost`), nên cổng chỉ cắt ticket bất thường dài gấp ~3 lần (dán cả đoạn văn / chèn lệnh) và chuyển cho người — không đặt thấp hơn để khỏi đẩy ca bình thường sang chị Hạnh (mỗi ca chuyển tốn 10.000đ = bằng làm tay). |
+| `business.pilot_scope` (all / warehouse / percent) | `all` (100%) | Vòng 1 giữ toàn bộ 22 ticket/ngày để cổng mới của Trường được thử trên mọi kho và luật 5 (không làm hỏng ca đúng) đo được trên đủ bộ nền; lỗi an toàn ở baseline chỉ nằm ở 1 ca (`T-002@55`, kho HCM / hãng VNX) nên sửa bằng cổng, không cắt cả kho HCM (25 lượt thử, `pass_rate` 0,96). Thu hẹp chỉ cân nhắc ở v2 nếu sau cổng một kho vẫn còn lỗi an toàn hoặc đắt hơn làm tay 10.000đ/ticket (nhóm `?` 10.359đ cần tra nguồn trước). |
+| `business.roi_min` | `0.5` | Khớp `business_ops.roi_min` đã ký trong Bản tiêu chí; baseline đạt ROI 1,34 với chi phí 4.203đ/ticket, nên 0,5 chừa đệm cho chi phí thêm của cổng (kiểm mẫu 10%, `decision_note`) và cho LLM thật đắt hơn MockLLM — dưới 0,5 nghĩa là mỗi 1đ bỏ ra chỉ tiết kiệm ròng chưa tới 0,5đ sau khi trừ tiền hoàn sai. |
 
 ### B7.5 · Câu 2.10 · Cổng con người, vận hành, pháp lý + Runbook phần 1–3
 

@@ -1,10 +1,10 @@
 {
   "_huong_dan": "Cổng kinh doanh, vận hành, pháp lý mà trợ lý PHẢI tuân theo. Bàn điền ở vòng 1, chốt bằng python3 -m lab10.checkpoint, rồi được sửa tiếp ở vòng 2. null = chưa đặt cổng này. Giải thích từng dòng: docs/guide.md, mục Cổng trong config (#ban-do).",
   "business": {
-    "daily_refund_cap_vnd": null,
-    "cost_budget_per_ticket_vnd": null,
+    "daily_refund_cap_vnd": 500000,
+    "cost_budget_per_ticket_vnd": 1500,
     "pilot_scope": {"mode": "all", "warehouses": [], "percent": 100},
-    "roi_min": null
+    "roi_min": 0.5
   },
   "operations": {
     "pic": "NV-TUNG",
