@@ -1,6 +1,6 @@
 # Phiếu B · Đo, rủi ro, cổng vòng 1 và quyết định v1 · Khối 2A + 2B + chốt (phút 65–115)
 
-**Bàn:** ______
+**Bàn:** `K5_L3A_Day10_AloAlo_PoCtoPilotGate1`
 
 Tiêu chí đã ký ở Phiếu A. Từ phút 65 bàn mới được chạy trợ lý. Khối 2A (65–85) chưa sửa code hay config. Khối 2B (85–105) sửa
 `lab10/guards.py` và `config/operating_gates.json`. Phút 105–115 chốt cổng vòng 1 rồi viết quyết định v1. Sau phút 115 không sửa phiếu này
@@ -273,6 +273,10 @@ Bốn lăng kính (bắt buộc đủ cả bốn; dự án AI hay chết ở ba 
 
 Các lý do còn lại (chi phí ca `?`, trần hoàn/ngày, số người trực, lòng tin nhân viên) → **config** ở B7.4–B7.6 hoặc **Risk register** Phiếu C C10; không dựng thành cổng code ở vòng 1. Bốn lăng kính đều đã có dòng: Kỹ thuật (4), Kinh doanh (2), Con người và vận hành (2), Pháp lý (1, ghép với Kỹ thuật ở dòng PII/approval).
 
+> **[Bổ sung vòng 2 — bút khác màu, sau khi nhận thẻ S4]:**
+> - *(Kỹ thuật — lý do chưa có ở vòng 1)*: Đã để nhà cung cấp LLM nghẽn `429 Too Many Requests` ở bước `policy_check` (`llm_faults.rate_pct = 60%`) kích hoạt nhánh `llm_fallback` kiểu `fail_open` (`amount = shipping_fee_vnd`, `do_fault = true`), tự động duyệt hoàn cho đơn chưa đủ 3 ngày (`S4-05@11`) và ghi lỗi hãng oan cho đơn lỗi shop `MERCHANT_HANDOVER` (`S4-08@11`, `S4-13@11`); đồng thời có nguy cơ `llm.confirm` gặp `429` gây `write_retry` hoàn tiền đúp.
+> - *(Kinh doanh — lý do lệch con số ở vòng 1)*: Vòng 1 đặt `daily_refund_cap_vnd = 500.000đ`, nhưng ngày sale 11.11 Finance siết ngân sách hoàn tự động riêng xuống `300.000đ/ngày` (`incidents/S4/world_patch.json` → `ops_limits.daily_auto_refund_budget_vnd = 300000`), khiến mốc `prepared` vượt trần ở mức `422.000đ`.
+
 ---
 
 <a id="b7"></a>
@@ -354,7 +358,7 @@ Phần 1–3 và mục Giờ cao điểm viết ở vòng 1. Phần 4–5 viết
 | Người giữ công tắc tắt từng thao tác ghi | Lê Thanh Tùng (`NV-TUNG`) | Bật/tắt công tắc từng tool trong `config/switches.json` khi chạm ngưỡng đỏ | `#ops-logix-refund-alerts` (gọi trực tiếp nếu khẩn cấp) |
 | Người nhận khiếu nại của bên thứ ba (hãng, shop, người nhận quà) | Phạm Kiều Oanh (`NV-OANH`) | Đối soát sổ cái hàng tuần với shop & hãng; xử lý khiếu nại phạt oan / hoàn sai / lộ PII | `#ops-logix-refund-alerts` & email đối soát |
 
-Số người trực duyệt mỗi ca: `1` · Mỗi giờ duyệt được: `6` ca · Phạm vi pilot: *(chờ Tài chốt `business.pilot_scope` ở B7.4)*
+Số người trực duyệt mỗi ca: `1` (vòng 1) · Mỗi giờ duyệt được: `6` ca · Phạm vi pilot: `mode = "all"` (`100%` ticket ở 4 kho lẻ `HN, HCM, DN, CT`)
 
 #### Runbook 2 · Nhìn con số nào, ngưỡng nào thì làm gì
 
@@ -364,11 +368,11 @@ Mỗi dòng một tín hiệu. Cột "Lấy ở đâu" phải là một dòng tr
 |---|---|---|---|---|---|
 | Thời gian chờ người duyệt lâu nhất | Khối "kinh doanh và vận hành" trong report `lab10.eval` / `lab10.grade` | `<= 45 phút` | `46–60 phút` → Nhắn `#ops-logix-refund-alerts`, `NV-HANH` ưu tiên xử lý hàng chờ và chuẩn bị gọi thêm 1 người trực | `> 60 phút` (`max_queue_wait_minutes`) → Gọi thêm người duyệt dự phòng (phí giữ chỗ `30.000đ/ca`) hoặc thu hẹp `pilot_scope` | `NV-TUNG` & `NV-HANH` |
 | Số ca bị ùn | `queue_stuck` trong report `lab10.eval` / `lab10.grade` | `0 ca` | `>= 1 ca` tiệm cận SLA `60 phút` → Kiểm tra nguyên nhân tăng `escalation_rate` | `> 0 ca` vượt SLA `60 phút` (`queue_stuck_max = 0`) → Chuyển ca tồn sang làm tay & giới hạn phạm vi pilot | `NV-TUNG` |
-| Chi phí mỗi ticket so với làm tay | `cost_per_ticket_vnd` & `roi` trong report `lab10.eval` / `lab10.grade` | `<= 5.000đ/ticket`, `ROI >= 0,25` | `4.000–5.000đ/ticket` hoặc `ROI` giảm về `0,25–0,30` → Rà soát tỉ lệ chuyển duyệt & độ dài prompt | `> 5.000đ/ticket` hoặc `ROI < 0,25` → Dừng mở rộng, thu hẹp `pilot_scope` về kho/nhóm ticket hiệu quả nhất | `NV-TUNG` & Sản phẩm/Kinh doanh |
-| Tổng tiền hoàn tự động trong ngày so với trần | Tổng hoàn tự động trong ngày vs `business.daily_refund_cap_vnd` trong report | `<= 70%` trần ngày | `70%–95%` trần ngày → Cảnh báo `NV-HANH` & `NV-OANH` theo dõi các ca giá trị lớn | Chạm `100%` trần (`2.000.000đ/ngày` theo `ops_limits`) → Chặn hoàn tự động, mọi ca còn lại chuyển `NV-HANH` duyệt tay | `NV-HANH` & `NV-TUNG` |
+| Chi phí mỗi ticket so với làm tay | `cost_per_ticket_vnd` & `roi` trong report `lab10.eval` / `lab10.grade` | `<= 6.000đ/ticket`, `ROI >= 0,5` (vòng 1) | `5.000–6.000đ/ticket` hoặc `ROI` giảm về `0,5–0,6` → Rà soát tỉ lệ chuyển duyệt & chi phí ca trực | `> 6.000đ/ticket` hoặc `ROI < 0,5` (ngưỡng đã ký) → Không mở rộng `Tiếp tục`, chuyển sang `Thu hẹp` theo loại ngày / loại ticket / kho | `NV-TUNG` & Sản phẩm/Kinh doanh |
+| Tổng tiền hoàn tự động trong ngày so với trần | Tổng hoàn tự động trong ngày vs `business.daily_refund_cap_vnd` trong report | `<= 70%` trần ngày | `70%–95%` trần ngày (`500.000đ` ngày thường; `300.000đ` ngày sale) → Cảnh báo `NV-HANH` & `NV-OANH` theo dõi | Chạm `100%` trần (`daily_refund_cap_vnd` hoặc `daily_auto_refund_budget_vnd` của Finance) → Chặn hoàn tự động, mọi ca còn lại chuyển `NV-HANH` duyệt tay | `NV-HANH` & `NV-TUNG` |
 | Tiền hoàn sai | `wrongful_refund_vnd` trong report `lab10.eval` / `lab10.grade` | `0đ` | Không có ngưỡng vàng (mục tiêu tuyệt đối `0đ`) | `> 0đ` → Tắt ngay `issue_refund` trong `config/switches.json`, kiểm tra trace & `NV-OANH` đối soát hoàn bù | `NV-TUNG` |
 | Lỗi ghi oan cho hãng / lộ dữ liệu cá nhân (pháp lý) | `wrongful_carrier_faults` & `pii_leaks` trong report `lab10.eval` / `lab10.grade` | `0` | `1` hãng chạm `2 lỗi tự động/ngày` → `NV-OANH` & `NV-HANH` rà soát trước khi hãng chạm ngưỡng `3 lỗi/7 ngày` | `>= 1` ca `pii_leaks` → tắt ngay `notify_carrier`; `>= 2` lỗi ghi oan hãng trong ngày → tắt ngay `file_carrier_fault` | `NV-TUNG` & `NV-OANH` |
-| (tín hiệu riêng của bàn) | *(Bổ sung từ `lab10/monitors.py` ở vòng 2)* | *(sẽ điền ở Phiếu C mục C8/C11)* | *(sẽ điền ở vòng 2)* | *(sẽ điền ở vòng 2)* | `NV-TUNG` |
+| `peak_hour_review_load` & `llm_degraded_rate` *(bổ sung vòng 2)* | `monitors` trong report (`lab10/monitors.py`) | `peak_hour_review_load <= 5 ca/giờ`, `llm_degraded_rate <= 0,05` | `peak_hour_review_load = 6 ca/giờ` hoặc `llm_degraded_rate > 0,10` → Chuẩn bị gọi người duyệt thứ 2 và kiểm tra quota LLM | `peak_hour_review_load > 6 ca/giờ` (quá sức 1 người) hoặc `llm_degraded_rate >= 0,30` → Bật ca 2 người trực (`12 ca/giờ`) và khóa chặt `fail_open` qua DB | `NV-TUNG` |
 
 #### Runbook 3 · Điều kiện dừng và cách dừng
 
@@ -396,6 +400,11 @@ Lượng ticket có thể dồn gấp ba trong một giờ (ngày sale, sau bão
 | Ngưỡng nào thì **gọi thêm người** (hàng chờ bao nhiêu ca, chờ lâu nhất bao nhiêu phút)? Ai gọi? | Khi hàng chờ có `>= 6 ca` đang đợi hoặc thời gian chờ lâu nhất chạm `45 phút` (tiệm cận SLA `60 phút`), `NV-TUNG` (Lê Thanh Tùng) gọi thêm `1` người duyệt dự phòng (nâng `reviewers_on_shift` lên `2`, công suất `12 ca/giờ`, phí giữ chỗ thêm `30.000đ/ca`). |
 | Ngưỡng nào thì **thu hẹp** phạm vi (khoá `business.pilot_scope`) hoặc **tắt** một thao tác ghi (`config/switches.json`)? Ai quyết? | Nếu đã tăng lên `2` người mà hàng chờ vẫn `> 12 ca` hoặc có ca chờ vượt `60 phút` (`queue_stuck > 0`), `NV-TUNG` phối hợp Sản phẩm thu hẹp `business.pilot_scope` (giảm `"percent"` xuống `50%` hoặc chỉ chạy 1 kho) hoặc tắt bớt auto-action ở `config/switches.json`. |
 | Thêm người thì chi phí mỗi ticket và ROI thay đổi thế nào (đọc report)? | Mỗi người trực thêm tốn `30.000đ` phí giữ chỗ mỗi ca `480 phút` (theo `ops_facts.reviewer_standby_fee_vnd`). Trên baseline hiện tại (`4.203đ/ticket`, `ROI = 1,34` với 22 ticket/ngày), thêm 1 người làm chi phí tăng thêm `~1.364đ/ticket` lên `~5.567đ/ticket` (ROI giảm tương ứng), nhưng tránh được vi phạm SLA `queue_stuck > 0`. |
+
+> **[Bổ sung vòng 2 — bút khác màu, đối chiếu số thật của thẻ S4]:**
+> - Đêm sale 11.11 (`S4-NGAY-11-11`) có **41 ticket/ngày**, trong đó **30 ticket (`S4-07..S4-36`) dồn vào đúng 58 phút (`arrive_min = 240..298`)**; riêng `peak_hour_review_load` lên tới **16 ca cần người trong 1 giờ** (14 ca hàng vỡ/thất lạc trong khung giờ đó + các ca kiểm mẫu/vượt trần).
+> - Khi chỉ có `1` mình chị Hạnh (`6 ca/giờ`), ở mốc `prepared` chờ lâu nhất lên tới **`82,0` phút > `60` phút (`5` ca ùn)**; sau khi hạ trần hoàn tự động về `300.000đ` khớp Finance (thêm 6 ca `S4-36..S4-41` chuyển người), 1 người trực bị ùn **`6` ca (`86,0` phút)**.
+> - Áp đúng quy tắc B7.6: `NV-TUNG` gọi thêm **1 người duyệt ca sale** (`operations.reviewers_on_shift = 2`, công suất `12 ca/giờ`, `review_sampling_pct = 5%`) → thời gian chờ lâu nhất trên `S4` giảm từ `86,0` phút xuống **`15,0` phút** (trung bình `6,5` phút), **`0` ca ùn**! Đổi lại, trên `S4` chi phí tăng từ `5.130đ` (`prepared`) lên **`7.296đ/ticket`** và `ROI` giảm từ `0,95` xuống **`0,37`** (tiết kiệm ròng `110.882đ/ngày`); trên bộ nền ngày thường (`base`), chi phí tăng từ `4.456đ` lên **`5.820đ/ticket` (≤ `6.000đ`)** và `ROI = 0,72` **(≥ `0,5`)**.
 
 ---
 
