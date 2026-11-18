@@ -76,10 +76,23 @@ def write_gate(ctx, action):
     if action.get("ticket_id") != ctx.ticket.get("ticket_id"):
         return Verdict.deny("lệnh ghi không thuộc ticket đang xử lý")
 
-    # Gate 1: refund entitlement and approval belong to this transaction.
+    # Gate 1: refund entitlement, idempotency, daily ceilings and approval belong to this transaction.
     if tool == "issue_refund":
+        is_fail_open = (
+            action.get("basis") == "fail_open"
+            or any(e.get("type") == "llm_fallback" and e.get("mode") == "fail_open" for e in ctx.events)
+        )
+        if is_fail_open:
+            ctx.log("llm_fail_open_intercepted", tool=tool, order_id=order["order_id"],
+                    db_delay_days=delay, cause=parcel.get("delay_cause"))
         if action.get("order_id") != order["order_id"]:
             return Verdict.escalate("lệnh hoàn không thuộc đơn đang xử lý")
+        if ctx.tools.ledger_rows(ticket_id=ctx.ticket["ticket_id"]):
+            ctx.log("duplicate_refund_blocked", reason="write_retry", order_id=order["order_id"])
+            return Verdict.deny("khoản hoàn của ticket này đã ghi sổ cái, chặn ghi trùng khi retry")
+        if ctx.tools.ledger_rows(order_id=order["order_id"]):
+            ctx.log("duplicate_refund_blocked", reason="order_already_refunded", order_id=order["order_id"])
+            return Verdict.deny("đơn hàng đã được hoàn tiền trước đó trong sổ cái")
         if parcel.get("delay_cause") is None:
             return Verdict.escalate("chưa ghi nhận nguyên nhân trễ; cần xác minh")
         amount = action.get("amount_vnd")
@@ -110,9 +123,45 @@ def write_gate(ctx, action):
                 valid = False
             if not valid:
                 return Verdict.escalate("phê duyệt sai đối tượng, hết hạn, đã dùng hoặc thiếu hạn mức")
+        else:
+            lim = ctx.tools.ops_limits()
+            strike_cap = lim.get("max_auto_strikes_per_carrier_per_day")
+            if strike_cap is not None and H.carrier_at_fault(policy, parcel, delay):
+                approved_tids = {r["ticket_id"] for r in ctx.tools.ledger_rows() if r.get("approval_id")}
+                auto_strikes = sum(
+                    1 for f in ctx.tools.fault_rows(carrier_id=parcel["carrier_id"])
+                    if f.get("ticket_id") not in approved_tids
+                )
+                if auto_strikes >= strike_cap:
+                    ctx.log("carrier_daily_strike_cap_hit", carrier_id=parcel["carrier_id"],
+                            strikes=auto_strikes, cap=strike_cap)
+                    return Verdict.escalate("từ lỗi vượt trần tự động của cùng hãng trong ngày cần người duyệt")
+            cust_cap = lim.get("max_auto_refund_per_customer_per_day_vnd")
+            if cust_cap is not None:
+                cust_today = sum(
+                    r["amount_vnd"] for r in ctx.tools.ledger_rows(customer_id=order["customer_id"])
+                    if not r.get("approval_id") and not str(r.get("ticket_id", "")).startswith("T-OLD-")
+                )
+                if cust_today + amount > cust_cap:
+                    ctx.log("customer_daily_cap_hit", customer_id=order["customer_id"],
+                            today=cust_today, asked=amount, cap=cust_cap)
+                    return Verdict.escalate("vượt trần hoàn tự động theo khách trong ngày, chuyển người duyệt")
+            spent_today = ctx.tools.auto_refund_today_vnd()
+            team_cap = (ctx.gates or {}).get("business", {}).get("daily_refund_cap_vnd")
+            fin_cap = lim.get("daily_auto_refund_budget_vnd")
+            if team_cap is not None and spent_today + amount > team_cap:
+                ctx.log("daily_budget_guard", source="team_cap", cap=team_cap, today=spent_today, asked=amount)
+            elif fin_cap is not None and spent_today + amount > fin_cap:
+                ctx.log("daily_budget_guard", source="finance_cap", cap=fin_cap, today=spent_today, asked=amount)
+                return Verdict.escalate("vượt ngân sách hoàn tự động trong ngày của Finance, chuyển người duyệt")
+        if is_fail_open:
+            return Verdict.modify("đã đối chiếu lại quyền lợi từ tracking DB thay cho fail_open", basis="policy")
 
     # Gate 2: check the actual parcel, carrier, cause and delay before a strike.
     elif tool == "file_carrier_fault":
+        if any(e.get("type") == "llm_fallback" and e.get("mode") == "fail_open" for e in ctx.events):
+            ctx.log("llm_fail_open_intercepted", tool=tool, order_id=order["order_id"],
+                    db_delay_days=delay, cause=parcel.get("delay_cause"))
         if (action.get("order_id") != order["order_id"]
                 or action.get("parcel_id") != parcel["parcel_id"]
                 or action.get("carrier_id") != parcel["carrier_id"]
