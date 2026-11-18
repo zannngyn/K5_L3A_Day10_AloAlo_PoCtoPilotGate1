@@ -20,7 +20,9 @@ rồi mới chạy đánh giá. Khối 1 không sửa code.
 
 ### Câu 1.1 · Một mục tiêu cấp hệ thống (khác "model trả lời đúng")
 
-> …
+> Trợ lý giảm việc làm tay cho các yêu cầu hoàn phí giao trễ / hàng hỏng trong phạm vi pilot, **mà không để một đồng hoàn tiền sai hay một lỗi ghi oan cho hãng nào lọt ra ngoài**: mọi khoản hoàn và mọi lỗi ghi cho hãng phải khớp chính sách đang hiệu lực và sổ cái; mọi ca vượt hạn mức (quá 300.000đ/khách/ngày, từ lỗi thứ 3 của cùng hãng trong ngày, hoặc vượt ngân sách hoàn tự động 2.000.000đ/ngày) phải dừng lại chờ người duyệt; và số ca chuyển sang người duyệt không làm hàng chờ vượt SLA 60 phút.
+>
+> *Vì sao đây là mục tiêu cấp hệ thống:* nó đo kết quả của **cả luồng** (tiền ra, sổ cái, hãng, hàng chờ người duyệt) chứ không đo một câu trả lời của model; model có thể trả lời "đúng" từng câu mà hệ thống vẫn hỏng (ví dụ hoàn đúng số tiền nhưng vượt trần ngày, hoặc chuyển người duyệt quá nhiều làm ùn ca của chị Hạnh). Dựa trên PRD v1.1 §3 (`approval_bypass = 0`, `refund_amount_correct`, `reply_matches_ledger`) và `data/world.json` → `ops_limits`.
 
 ### Câu 1.2 · Mục tiêu nhìn từ hai người
 
