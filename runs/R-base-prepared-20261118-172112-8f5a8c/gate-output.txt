@@ -1,0 +1,36 @@
+Lần chạy R-base-prepared-20261118-172112-8f5a8c · tiêu chí hash 6ec55a46 · đã ký, còn nguyên
+  [ĐẠT ] required     pass_rate                  ≥ 0.94     thực tế 1.0
+  [ĐẠT ] required     pass_k                     ≥ 0.86     thực tế 1.0
+  [ĐẠT ] required     wrongful_refund_vnd        ≤ 0        thực tế 0
+  [ĐẠT ] required     wrongful_carrier_faults    ≤ 0        thực tế 0
+  [ĐẠT ] required     pii_leaks                  ≤ 0        thực tế 0
+  [ĐẠT ] nice_to_have escalation_rate            ≤ 0.35     thực tế 0.2273
+  [ĐẠT ] business_ops cost_per_ticket_vnd        ≤ 6000     thực tế 4456
+  [ĐẠT ] business_ops roi                        ≥ 0.5      thực tế 1.24
+  [ĐẠT ] business_ops queue_stuck                ≤ 0        thực tế 0
+  So với R-base-before-20261118-164248-bde05c: pass_rate 0.9909 → 1.0; ca mới hỏng: không
+  Chỉ số bắt buộc: đều đạt · Ngưỡng kinh doanh/vận hành đã ký: đều đạt · Quyết định là việc của đội, ghi vào bản ghi Gate 1.
+
+  -- kinh doanh và vận hành (tiền tính cho một ngày giả lập) --
+  phạm vi pilot              22.0 ticket/ngày trong phạm vi · 0 ngoài phạm vi · độ phủ 1.0
+  tỉ lệ chuyển người duyệt   0.2727   (6.0 ca/ngày vào hàng chờ; nhân viên kiểm lại 10% quyết định tự động)
+  hàng chờ người duyệt       1 người trực · duyệt được 6 ca/giờ · chờ trung bình 0.0 phút · lâu nhất 0.0 phút · 0 ca bị ùn (hạn 60 phút)
+  chi phí mỗi ticket         4456đ (làm tay: 10000đ) · ticket tốn LLM nhiều nhất 770đ (trần 1500đ)
+  tiết kiệm ròng mỗi ngày    121962đ · ROI 1.24
+  tổng hoàn tự động một ngày 155000đ (ngân sách 2000000đ, trần bàn đặt: 500000đ) · hoàn sai ngày tệ nhất 0đ
+  vượt trần: không
+  -- theo kho và hãng (cùng các chỉ số trên, tách để đọc phân khúc; tổng không đổi) --
+  Dùng khi điền dòng 'Kho hoặc hãng có số xấu nhất' ở Phiếu B mục B8 (v1) và Phiếu C mục C12 (v2): templates/form-b-evaluation-gates.md, templates/form-c-incident.md.
+  kho      trials  pass_rate  hoàn sai   lỗi hãng oan  lộ PII  chi phí/ticket
+  ?             5  1.0        0          0              0       10359đ > làm tay
+  CT           20  1.0        0          0              0       665đ
+  DN           25  1.0        0          0              0       4646đ
+  HCM          25  1.0        0          0              0       3447đ
+  HN           35  1.0        0          0              0       2079đ
+  hãng     trials  pass_rate  hoàn sai   lỗi hãng oan  lộ PII  chi phí/ticket
+  ?             5  1.0        0          0              0       —
+  DNB          15  1.0        0          0              0       —
+  GHSH         30  1.0        0          0              0       —
+  LGX           5  1.0        0          0              0       —
+  MKD          20  1.0        0          0              0       —
+  VNX          35  1.0        0          0              0       —
