@@ -1,0 +1,8 @@
+# Giữ đúng từng byte trên mọi máy (Windows / Linux / Mac), vì các file khoá được kiểm bằng sha256 của byte.
+# Mặc định: không đổi xuống dòng, file lấy về y hệt trên GitHub (LF) -> khớp lab10/MANIFEST.json.
+* -text
+
+# Ba file đã niêm phong được băm trên Windows (CRLF) lúc ký / chốt vòng 1 -> luôn lấy về dạng CRLF để khớp hash.
+config/acceptance_criteria.json text eol=crlf
+config/operating_gates.round1.json text eol=crlf
+lab10/guards_round1.py text eol=crlf
